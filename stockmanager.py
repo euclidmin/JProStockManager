@@ -122,9 +122,6 @@ class stock_window:
         cb.currentIndexChanged.connect(self.idxchanged)
         cb.highlighted.connect(self.highlighted)
 
-
-
-    
     def activated(self):
         print("activated")
         text = self.combobox_manufacturer.currentText()
@@ -132,18 +129,11 @@ class stock_window:
         print(text)
         self.combobox_add_product()
 
-        
-        
-
     def idxchanged(self):
         print("idx changed")
 
     def highlighted(self):
         print("highlighted")
-        
-
-
-        
 
     def combobox_add_product(self):
         name = self.combobox_manufacturer_text
@@ -153,10 +143,6 @@ class stock_window:
         self.combobox_products = cb
         cb.addItems(p_list)
 
-
-
-
-    
 
 
 if __name__ == '__main__':
