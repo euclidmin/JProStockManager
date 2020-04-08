@@ -27,6 +27,7 @@ class StockManager:
         self.m_sheet = self.workbook['Manufacturer']
 
 
+
     def _update_count(self, row, cnt):
         self.p_sheet['G' + str(row)] = self.p_sheet['G' + str(row)].value + cnt
 
@@ -68,6 +69,25 @@ class StockManager:
         manufacturer_list = list(map(cell_value, manuf_cells('B')))
         return manufacturer_list[1:]         # 첫줄의 카테고리 이름을 제외 시킨다.
 
+    def get_products(self, name):            # name 은 제조사 이름 ex)다미끼
+        product_sheet = self.workbook[name]
+
+        product_cells = lambda colm: product_sheet[colm]
+        cell_value = lambda cell: cell.value
+
+        product_set = set(map(cell_value, product_cells('B')))
+        product_set.remove('NAME')
+        return list(product_set)
+
+
+
+
+        
+
+
+        
+
+
 
 
 
@@ -89,11 +109,54 @@ class stock_window:
         self.main_window.show()
 
         self.combobox_add_manufacturer()
+        self.combobox_manufacturer_text = None
+
 
     def combobox_add_manufacturer(self):
         cb = self.main_window.findChild(QtWidgets.QComboBox, "comboBox")
+        self.combobox_manufacturer = cb
+
         mf_list = self.sm.get_manufacturer()
         cb.addItems(mf_list)
+        cb.activated.connect(self.activated)
+        cb.currentIndexChanged.connect(self.idxchanged)
+        cb.highlighted.connect(self.highlighted)
+
+
+
+    
+    def activated(self):
+        print("activated")
+        text = self.combobox_manufacturer.currentText()
+        self.combobox_manufacturer_text = text
+        print(text)
+        self.combobox_add_product()
+
+        
+        
+
+    def idxchanged(self):
+        print("idx changed")
+
+    def highlighted(self):
+        print("highlighted")
+        
+
+
+        
+
+    def combobox_add_product(self):
+        name = self.combobox_manufacturer_text
+        p_list = self.sm.get_products(name)
+        print(p_list)
+        cb = self.main_window.findChild(QtWidgets.QComboBox, "comboBox_2")
+        self.combobox_products = cb
+        cb.addItems(p_list)
+
+
+
+
+    
 
 
 if __name__ == '__main__':
